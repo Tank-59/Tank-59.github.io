@@ -244,6 +244,486 @@
             
               
                 
+                <a class="post-title-link" href="/2016/08/08/Node模块系统/" itemprop="url">
+                  Node模块系统
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-08T23:59:51+08:00" content="2016-08-08">
+              2016-08-08
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Node/" itemprop="url" rel="index">
+                    <span itemprop="name">Node</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Node-js-学习笔记02"><a href="#Node-js-学习笔记02" class="headerlink" title="Node.js 学习笔记02"></a>Node.js 学习笔记02</h1><h2 id="Node-中的-JavaScript"><a href="#Node-中的-JavaScript" class="headerlink" title="Node 中的 JavaScript"></a>Node 中的 JavaScript</h2><ul>
+<li><p>REPL运行环境</p>
+<ul>
+<li>READ</li>
+<li>EVAL</li>
+<li>PRINT</li>
+<li>LOOP</li>
+<li>输入 <code>node</code> 回车就可以进入 REPL 运行环境</li>
+<li>通过 Ctrl+cc两次 退出 REPL 环境</li>
+</ul>
+</li>
+<li><p>ECMAScript</p>
+<ul>
+<li>Node 对最新的 ECMAScript 语言标准支持的非常好</li>
+<li>Node 7.0 对最新的 ES6 支持了将近 97% 的语法</li>
+<li>Node 除了官方的 ECMAScript 语言规范,同时将 console 对象、定时器等函数也移植到 Node 中</li>
+<li>各大 JavaScript 运行环境的最新版本，对ES6的支持可以查看：<a href="http://kangax.github.io/es5-compat-table/es6/" target="_blank" rel="external">http://kangax.github.io/es5-compat-table/es6/</a></li>
+</ul>
+</li>
+<li><p>全局对象</p>
+<ul>
+<li>global<ul>
+<li>相对于浏览器中的的全局对象 window</li>
+<li>全局作用域和模块作用域的概念</li>
+</ul>
+</li>
+<li>Console<ul>
+<li>log</li>
+<li>info</li>
+<li>warn</li>
+<li>error</li>
+</ul>
+</li>
+<li>process<ul>
+<li>进程对象，系统级别API，例如获取当前运行程序分配内存代销，占用内存大小等</li>
+<li>process.stdout.write() 输出数据到终端</li>
+<li>process.stdin.on(‘data’, callback(data)) 接收输入用户终端中的输入</li>
+<li>process.pid 获取当前运行程序的进程id</li>
+<li>process.kill(进程id) 关闭一个应用程序:</li>
+<li>process.arch 获取当前Node版本的位数</li>
+<li>process.argv 获取命令行参数</li>
+<li>process.end 获取环境变量</li>
+<li>process.exit() 退出当前进程</li>
+<li>process.version 查看当前Node版本号</li>
+<li>具体信息请见官方文档：<a href="https://nodejs.org/dist/latest-v7.x/docs/api/process.html#process_process_memoryusage" target="_blank" rel="external">https://nodejs.org/dist/latest-v7.x/docs/api/process.html#process_process_memoryusage</a></li>
+</ul>
+</li>
+<li>Buffer<ul>
+<li>全局构造函数：Buffer</li>
+<li>也可以说是一个全局对象</li>
+<li>专门用来解析处理 二进制数据的</li>
+<li>Buffer 类似于数组，二进制数据的一种表现形式</li>
+<li>数组内部是一个由 16进制 表现形式的一个一个的元素，每个元素其实就是一个字节</li>
+<li>一个字节就是 8位</li>
+<li>Buffer 和 字符 之间有转换关系</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>全局函数</p>
+<ul>
+<li>在 Node 环境中，也提供了 定时器对象，和浏览器中的定时器用法一致，但是实现方式有差异</li>
+<li>setInterval 和 clearInterval</li>
+<li>setTimeout 和 clearTimeout</li>
+<li>setImmediate 和 clearImmediate<ul>
+<li>这也是一个定时器，但是不需要时间</li>
+<li>可以异步的执行一段代码</li>
+<li>类似于 setTimeout(function () {}, 0)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>模块内成员</p>
+<ul>
+<li><strong>dirname 和 </strong>filename<ul>
+<li>这是两个属性，每一个模块内部都可以直接使用</li>
+</ul>
+</li>
+<li>require<ul>
+<li>加载模块，执行模块中的代码，得到该模块中的 module.exports 接口对象</li>
+</ul>
+</li>
+<li>exports<ul>
+<li>它是 module.exports 的一个引用</li>
+</ul>
+</li>
+<li>module<ul>
+<li>模块对象，其中有一个非常重要的属性：module.exports</li>
+<li>每一个模块内部对外暴露的成员就是 module.exports</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="模块系统"><a href="#模块系统" class="headerlink" title="模块系统"></a>模块系统</h2><h3 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h3><p>Node 基于 CommonJS 规范实现了自己的一套模块系统规范。</p>
+<ul>
+<li>模块系统<ul>
+<li>定义你的模块成员</li>
+<li>模块与模块之间如何通信</li>
+</ul>
+</li>
+</ul>
+<p>CommonJS 不仅仅包含 模块定义规范，它还给 JavaScript 语言没有触及到服务器领域制定了一些规范。<br>例如：二进制数据操作、文件操作、网络操作、进程操作、模块系统规范。。。</p>
+<ul>
+<li>一个 JavaScript 脚本文件就是一个模块<ul>
+<li>每一个模块都是一个私有的作用域</li>
+</ul>
+</li>
+<li>module.exports</li>
+<li>requrie</li>
+</ul>
+<p>Node 中的模块，一共分为三类形式，具体如下：</p>
+<h3 id="文件模块"><a href="#文件模块" class="headerlink" title="文件模块"></a>文件模块</h3><p>以 <code>./</code> 或 <code>../</code> 开头的模块标识就是文件模块，一般就是用户编写的。</p>
+<h3 id="核心模块"><a href="#核心模块" class="headerlink" title="核心模块"></a>核心模块</h3><ul>
+<li>核心模块就是 node 内置的模块，需要通过唯一的标识名称来进行获取。</li>
+<li>每一个核心模块基本上都是暴露了一个对象，里面包含一些方法供我们使用</li>
+<li>一般在加载核心模块的时候，变量的起名最好就和核心模块的标识名同名即可<ul>
+<li>例如：<code>const fs = require(&#39;fs&#39;)</code></li>
+</ul>
+</li>
+<li>核心模块本质上也是文件模块<ul>
+<li>核心模块已经被编译到了 node 的可执行程序，一般看不到</li>
+<li>可以通过查看 node 的源码看到核心模块文件</li>
+<li>核心模块也是基于 CommonJS 模块规范</li>
+</ul>
+</li>
+</ul>
+<p>每一个模块都提供了单一的功能，以下是常用的核心模块：</p>
+<table>
+<thead>
+<tr>
+<th>模块名称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fs</td>
+<td>文件操作</td>
+</tr>
+<tr>
+<td>http</td>
+<td>http服务</td>
+</tr>
+<tr>
+<td>net</td>
+<td>Socket网络编程</td>
+</tr>
+<tr>
+<td>os</td>
+<td>操作系统相关</td>
+</tr>
+<tr>
+<td>path</td>
+<td>路径操作</td>
+</tr>
+<tr>
+<td>querystring</td>
+<td>处理查询字符串</td>
+</tr>
+<tr>
+<td>url</td>
+<td>解析处理url路径</td>
+</tr>
+<tr>
+<td>util</td>
+<td>工具函数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="第三方模块"><a href="#第三方模块" class="headerlink" title="第三方模块"></a>第三方模块</h3><p>Node 开发，需要使用大量的第三方模块，所以了解模块的分类以及模块的加载机制流程很有必要。</p>
+<p>通过 <code>npm install</code> 安装的模块就是第三方模块。</p>
+<p>加载规则如下：</p>
+<ul>
+<li>如果不是文件模块，也不是核心模块</li>
+<li>node 会去 node_modules 目录中找（找跟你引用的名称一样的目录），例如这里 <code>require(&#39;underscore&#39;)</code></li>
+<li>如果在 node_modules 目录中找到 <code>underscore</code> 目录，则找该目录下的 <code>package.json</code> 文件</li>
+<li>如果找到 <code>package.json</code> 文件，则找该文件中的 <code>main</code> 属性，拿到 main 指定的入口模块</li>
+<li>如果过程都找不到，node 则取上一级目录下找 <code>node_modules</code> 目录，规则同上。。。</li>
+<li>如果一直找到代码文件的根路径还找不到，则报错。。。</li>
+</ul>
+<p>注意：对于第三方模块，都是 <code>npm install</code> 命令进行下载的，就放到项目根目录下的 <code>node_modules</code> 目录。</p>
+<h4 id="关于第三方包"><a href="#关于第三方包" class="headerlink" title="关于第三方包"></a>关于第三方包</h4><ul>
+<li>只能在 Node 中使用的包<ul>
+<li>例如：open fs-extra</li>
+</ul>
+</li>
+<li>只能在浏览器中使用的包<ul>
+<li>例如 jquery swiper</li>
+</ul>
+</li>
+<li>既能在浏览器也能在Node中使用的包<ul>
+<li>不涉及具体的环境 API</li>
+<li>例如 moment underscore</li>
+</ul>
+</li>
+</ul>
+<h3 id="模块加载流程"><a href="#模块加载流程" class="headerlink" title="模块加载流程"></a>模块加载流程</h3><ul>
+<li>优先从缓存加载</li>
+<li>路径分析和文件定位<ul>
+<li>模块标识符分析<ul>
+<li>核心模块<ul>
+<li><code>fs、http、path、os</code></li>
+</ul>
+</li>
+<li>路径形式的文件模块<ul>
+<li><code>./a.js 或者 ../b.js</code></li>
+</ul>
+</li>
+<li>第三方模块<ul>
+<li><code>underscore、less</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>文件定位<ul>
+<li>文件扩展名分析：按照 <code>.js</code> <code>.json</code> <code>.node</code> 的次序补足扩展名</li>
+<li>目录分析和包</li>
+</ul>
+</li>
+<li>模块编译<ul>
+<li><code>.js</code> 文件，通过 fs 模块同步读取文件后编译执行</li>
+<li><code>.node</code> 文件</li>
+<li><code>.json</code> 文件，通过 fs 模块同步读取文件后使用 <code>JSON.parse()</code> 解析返回结果</li>
+<li>其它扩展名，被当作 <code>.js</code> 文件载入</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="包与npm"><a href="#包与npm" class="headerlink" title="包与npm"></a>包与npm</h2><p>包其实就是一些模块组织到一起，放到一个目录中的一个称呼，叫包或者模块都行。</p>
+<h3 id="package-json"><a href="#package-json" class="headerlink" title="package.json"></a>package.json</h3><p>每个项目的根目录下面，一般都有一个package.json文件，<br>定义了这个项目所需要的各种模块，以及项目的配置信息（比如名称、版本、依赖项等信息）。</p>
+<p>package.json文件内部就是一个JSON对象，<br>该对象的每一个成员就是当前项目的一项设置。<br>比如name就是项目名称，version是版本。</p>
+<ul>
+<li>npm init [-y]<ul>
+<li>生成 package.json 文件</li>
+</ul>
+</li>
+<li>main<ul>
+<li>用来指定加载的时候的入口模块的</li>
+</ul>
+</li>
+<li>dependencies<ul>
+<li>当前项目或者说包的依赖项</li>
+<li>npm install 的时候，会自动查找当前目录下的 package.json 文件中的 dependencies 属性</li>
+<li>然后依次下载</li>
+</ul>
+</li>
+</ul>
+<h3 id="npm"><a href="#npm" class="headerlink" title="npm"></a>npm</h3><h4 id="介绍：两层含义"><a href="#介绍：两层含义" class="headerlink" title="介绍：两层含义"></a>介绍：两层含义</h4><p>npm有两层含义。<br>一层含义是Node的开放式模块登记和管理系统，网址为 <a href="https://www.npmjs.com/。" target="_blank" rel="external">https://www.npmjs.com/。</a><br>另一层含义是Node默认的模块管理器，是一个命令行下的软件，用来安装和管理Node模块。</p>
+<h4 id="npm-的安装和更新"><a href="#npm-的安装和更新" class="headerlink" title="npm 的安装和更新"></a>npm 的安装和更新</h4><p>npm 本身也是基于 node 开发的一个包，或者说一个 CLI 工具。</p>
+<p>npm 不需要单独安装。在安装 Node 的时候，会连带一起安装 npm 。<br>Node 附带的 npm 可能不是最新版本，可以使用 <code>npm install -g npm</code> ，将 npm 更新到最新版本。</p>
+<h4 id="本地安装"><a href="#本地安装" class="headerlink" title="本地安装"></a>本地安装</h4><p>对于想要使用第三方包的功能，就必须下载到本地项目中，<br>想要使用第三方包暴露的接口 API 辅助实现功能。</p>
+<h4 id="全局安装"><a href="#全局安装" class="headerlink" title="全局安装"></a>全局安装</h4><p>全局安装，任何包都可以全局安装。</p>
+<p>一般全局安装就是安装一些命令行工具，例如：<code>http-server</code>、<code>less</code>、<code>browser-sync</code>、<code>hexo</code>，<br>安装完之后，一般都会提供一个命令，供你去使用。</p>
+<h4 id="既能本地安装也能全局安装的包"><a href="#既能本地安装也能全局安装的包" class="headerlink" title="既能本地安装也能全局安装的包"></a>既能本地安装也能全局安装的包</h4><p>例如 <code>less</code>，安装到全局就可以使用命令 <code>lessc</code> 来做解析处理。</p>
+<p>安装到本地，就可以通过 <code>require(&#39;less&#39;)</code> 的形式加载这个模块，然后使用这个包里面提供的一些 API。</p>
+<h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><ul>
+<li>npm help：查看 npm 命令列表</li>
+<li>npm -l：查看各个命名的简单用法</li>
+<li>npm -v：查看 npm 的版本</li>
+<li><code>npm init [-y]</code>：初始化一个 package.json 文件</li>
+<li>npm info 包名 [字段名]：查看指定模块的 package.json 信息</li>
+<li>npm search 包名：该命令用于搜索 npm 仓库</li>
+<li>npm list：以树型结构列出当前项目安装的所有模块，以及它们依赖的模块</li>
+<li>npm list 包名：列出单个模块</li>
+<li>npm list -g：列出全局安装的模块</li>
+<li><code>npm install [--save] 包名[#版本号]</code><ul>
+<li>npm install 包名：安装包到当前项目下的 node_modules 目录下</li>
+<li>npm install|i –save|-S 包名 安装包的同时把依赖项保存到 包说明文件中</li>
+<li>本地项目安装：目的是为了辅助你的代码功能开发</li>
+</ul>
+</li>
+<li><code>npm uninstall [--save] 包名</code><ul>
+<li>npm uninstall 包名：删除包，但是如果包说明文件中有依赖项，那么不会删除</li>
+<li>npm uninstall –save 包名：删除包，同时将 package.json 文件中的依赖项也删除</li>
+</ul>
+</li>
+<li><code>npm install</code></li>
+<li><code>npm install -g 包名</code><ul>
+<li>全局安装：一般用于安装命令行中的 CLI 工具</li>
+</ul>
+</li>
+<li><code>npm uninstall -g 包名</code></li>
+<li>npm config<ul>
+<li>npm config list 查看 npm 配置项</li>
+<li>npm config set init.author.name $name 使用 npm init 时，默认的 name</li>
+<li>npm config set init.author.email $email 使用 npm init 时，默认的 email</li>
+<li>npm congig set prefix “路径” 改变全局包安装路径</li>
+<li>npm config set registry “镜像路径”</li>
+</ul>
+</li>
+</ul>
+<h4 id="解决-npm-被墙问题"><a href="#解决-npm-被墙问题" class="headerlink" title="解决 npm 被墙问题"></a>解决 npm 被墙问题</h4><ul>
+<li><p>cnpm</p>
+<ul>
+<li><code>npm install -g cnpm</code><ul>
+<li>安装了 cnpm 之后，就可以使用 cnpm 去安装和管理包了</li>
+<li>默认 cnpm 就会走淘宝的npm镜像源地址</li>
+<li><code>cnpm install -g 包名</code></li>
+<li><code>cnpm install 包名</code></li>
+<li>npm 的命令都可以通过 cnpm 来代替</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>手动配置镜像源</p>
+<ul>
+<li><code>npm install 包名 --registry=https://registry.npm.taobao.org</code></li>
+<li><code>npm config set registry=https://registry.npm.taobao.org</code><ul>
+<li>将 npm 的下载镜像源地址改为淘宝的 cnpm 镜像源</li>
+<li>这样执行来命令，以后所有的 install 都会通过你指定的地址去下载</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>使用 nrm 管理多个镜像源</p>
+<pre><code>+ `npm install -g nrm`
+   * npm registry manager
+   * nrm 可以用来管理多个镜像源地址
+   * nrm ls 列出所有的镜像源地址
+   * nrm current 显示当前使用的镜像源地址
+   * nrm use 镜像源名称 切换到指定的镜像源
+   * nrm add 名称 地址  添加指定镜像源
+   * nrm del 名称       删除指定镜像源
+</code></pre></li>
+<li><p>Tips:使用 nvm 安装和管理多个 Node 版本</p>
+<ul>
+<li>node version manager</li>
+<li><a href="https://github.com/coreybutler/nvm-windows" target="_blank" rel="external">https://github.com/coreybutler/nvm-windows</a></li>
+<li><code>nvm install 版本号</code> 安装具体版本的node</li>
+<li><code>nvm use 版本号</code> 切换到已安装的具体版本</li>
+<li><code>nvm ls</code> 列出本地已安装所有的node环境版本</li>
+<li><code>nvm proxy 代理地址</code> 配置代理，使用代理服务器下载</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="调试-Node"><a href="#调试-Node" class="headerlink" title="调试 Node"></a>调试 Node</h2><p>所谓的 Debug ，也就是找到并去除缺陷的过程，这些过程呢，其实也是由套路规则可循的，以下是我总结的一些调试经验：</p>
+<ul>
+<li><strong>系统化注释掉或禁用代码块</strong>：排除法</li>
+<li>分析网络数据流，确定问题是客户端还是服务器</li>
+<li>使用之前能用的输入，并一点一定地修改输入，直到问题呈现</li>
+<li>用版本控制逐次回退，直到问题消失</li>
+</ul>
+<h3 id="Node-中的-Debug"><a href="#Node-中的-Debug" class="headerlink" title="Node 中的 Debug"></a>Node 中的 Debug</h3><ul>
+<li><strong>console.log</strong></li>
+<li>node-inspector<ul>
+<li>这个一个可以在浏览器中调试 Node 的一个工具</li>
+</ul>
+</li>
+<li>visual studio code<ul>
+<li>调试Node最好的一个调试工具</li>
+<li>也是一个编辑器，内部类似于 Webstorm，也集成了一个调试Node代码的功能</li>
+</ul>
+</li>
+<li>Webstorm</li>
+</ul>
+<hr>
+<h2 id="path-路径处理模块"><a href="#path-路径处理模块" class="headerlink" title="path 路径处理模块"></a>path 路径处理模块</h2><ul>
+<li>path.basename(path[, ext])：获取文件名部分</li>
+<li>path.dirname(path)：获取目录部分</li>
+<li>path.extname(path)：获取扩展名部分</li>
+<li>path.isAbsolute(path)：判断是否是绝对路径</li>
+<li>path.join([…paths])：将多个路径拼接为一个路径</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/08/04/初识Node-js/" itemprop="url">
                   初识Node.js
                 </a>
@@ -797,7 +1277,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
