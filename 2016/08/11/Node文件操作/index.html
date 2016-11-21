@@ -1,0 +1,685 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Node.js," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="Node.js 学习笔记03文件操作同步调用和异步调用fs模块对文件的几乎所有操作都有同步和异步两种形式，例如：readFile() 和 readFileSync()。
+
+同步调用立即执行，会阻塞后续代码继续执行，如果想要捕获异常需要使用 try-catch
+异步调用不会阻塞后续代码继续执行，需要回调函数作为额外的参数，通常包含一个错误作为回调函数的第一个参数
+异步调用通过判断第一个err对象来处">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node文件操作">
+<meta property="og:url" content="http://yoursite.com/2016/08/11/Node文件操作/index.html">
+<meta property="og:site_name" content="曹艳奇的博客">
+<meta property="og:description" content="Node.js 学习笔记03文件操作同步调用和异步调用fs模块对文件的几乎所有操作都有同步和异步两种形式，例如：readFile() 和 readFileSync()。
+
+同步调用立即执行，会阻塞后续代码继续执行，如果想要捕获异常需要使用 try-catch
+异步调用不会阻塞后续代码继续执行，需要回调函数作为额外的参数，通常包含一个错误作为回调函数的第一个参数
+异步调用通过判断第一个err对象来处">
+<meta property="og:updated_time" content="2016-11-21T15:38:20.681Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node文件操作">
+<meta name="twitter:description" content="Node.js 学习笔记03文件操作同步调用和异步调用fs模块对文件的几乎所有操作都有同步和异步两种形式，例如：readFile() 和 readFileSync()。
+
+同步调用立即执行，会阻塞后续代码继续执行，如果想要捕获异常需要使用 try-catch
+异步调用不会阻塞后续代码继续执行，需要回调函数作为额外的参数，通常包含一个错误作为回调函数的第一个参数
+异步调用通过判断第一个err对象来处">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/08/11/Node文件操作/"/>
+
+
+  <title> Node文件操作 | 曹艳奇的博客 </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">曹艳奇的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Node文件操作
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-11T23:39:51+08:00" content="2016-08-11">
+              2016-08-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Node/" itemprop="url" rel="index">
+                    <span itemprop="name">Node</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Node-js-学习笔记03"><a href="#Node-js-学习笔记03" class="headerlink" title="Node.js 学习笔记03"></a>Node.js 学习笔记03</h1><h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2><h3 id="同步调用和异步调用"><a href="#同步调用和异步调用" class="headerlink" title="同步调用和异步调用"></a>同步调用和异步调用</h3><p>fs模块对文件的几乎所有操作都有同步和异步两种形式，例如：<code>readFile()</code> 和 <code>readFileSync()</code>。</p>
+<ul>
+<li>同步调用立即执行，会阻塞后续代码继续执行，如果想要捕获异常需要使用 <code>try-catch</code></li>
+<li>异步调用不会阻塞后续代码继续执行，需要回调函数作为额外的参数，通常包含一个错误作为回调函数的第一个参数</li>
+<li>异步调用通过判断第一个err对象来处理异常</li>
+<li>异步调用结果往往通过回调函数来进行获取</li>
+</ul>
+<p>Node 只在文件IO操作中，提供了同步调用和异步调用两种形式，两者可以结合使用，<br>但是推荐能使用异步调用解决问题的情况下，少用同步调用。</p>
+<h3 id="Node-支持的编码类型"><a href="#Node-支持的编码类型" class="headerlink" title="Node 支持的编码类型"></a>Node 支持的编码类型</h3><ul>
+<li>ascii</li>
+<li>utf8</li>
+<li>utf16le</li>
+<li>ucs2</li>
+<li>base64</li>
+<li>latin1</li>
+<li>binary</li>
+<li>hex</li>
+</ul>
+<p>Node 不支持 gbk，所以去社区中找可用的第三方包来解决。</p>
+<h3 id="文件操作常用API"><a href="#文件操作常用API" class="headerlink" title="文件操作常用API"></a>文件操作常用API</h3><ul>
+<li>fs.writeFile(file, data, callback)：文件写入</li>
+<li>fs.appendFile(file, data, callback)：文件追加</li>
+<li>fs.readFile(file[, options], callback)：文件读取</li>
+<li>fs.unlink(path, callback)：删除文件</li>
+<li>fs.stat(path, callback)：获取文件信息</li>
+<li>fs.access(path, callback)：验证文件路径是否存在</li>
+<li>fs.rename(oldPath, newPath, callback)：重命名或移动文件</li>
+</ul>
+<h3 id="目录操作常用API"><a href="#目录操作常用API" class="headerlink" title="目录操作常用API"></a>目录操作常用API</h3><ul>
+<li>fs.mkdir(path, callback)：创建一个目录</li>
+<li>fs.rmdir(path, callback)：删除一个空目录<ul>
+<li>该 API ，只能删除一个空目录</li>
+<li>如果想要删除一个非空目录，自己写代码：递归思路</li>
+</ul>
+</li>
+<li>fs.readdir(path, callback)：读取一个目录</li>
+<li>fs.rename(oldPath, newPath, callback)：重命名或移动目录</li>
+</ul>
+<h3 id="监视"><a href="#监视" class="headerlink" title="监视"></a>监视</h3><ul>
+<li>fs.watchFile(filename[, options], listener)</li>
+<li>fs.watch(filename[, options][, listener])</li>
+</ul>
+<h3 id="文件流"><a href="#文件流" class="headerlink" title="文件流"></a>文件流</h3><h2 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h2><p>Promise:</p>
+<p>Promise是异步编程的一种解决方案，比传统的解决方案——回调函数和事件——更合理和更强大。<br>它由社区最早提出和实现，ES6将其写进了语言标准，统一了用法，原生提供了 <code>Promise</code> 对象。</p>
+<p>它的英语意思就是 “承诺” 。 <code>I promise you.</code> ，表示是一个未来的事情，可能做到，也可能失败。</p>
+<p>Promise，简单说就是一个容器，里面保存着某个未来才会结束的事件（通常是一个异步操作）的结果。</p>
+<h3 id="Promise-对象"><a href="#Promise-对象" class="headerlink" title="Promise 对象"></a>Promise 对象</h3><p>从语法上说，Promise是一个对象，从它可以获取异步操作的结果。</p>
+<p>Promise对象代表一个异步操作，有三种状态：</p>
+<ul>
+<li>Pending（进行中）</li>
+<li>Resolved（已完成，又称Fulfilled）</li>
+<li>Rejected（已失败）</li>
+</ul>
+<p>只有异步操作的结果，可以决定当前是哪一种状态。</p>
+<p>有了Promise对象，就可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数。<br>此外，Promise对象提供统一的接口，使得控制异步操作更加容易。</p>
+<h3 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h3><h3 id="Promise-all"><a href="#Promise-all" class="headerlink" title="Promise.all()"></a>Promise.all()</h3><p>Promise.all方法用于将多个Promise实例，包装成一个新的Promise实例。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> p = <span class="built_in">Promise</span>.all([p1, p2, p3]);</div><div class="line"></div><div class="line">p.then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</div><div class="line"></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>Promise.all方法接受一个数组作为参数，p1、p2、p3都是Promise对象的实例。</p>
+<p>p的状态由p1、p2、p3决定，分成两种情况：</p>
+<ul>
+<li><p>只有p1、p2、p3的状态都变成fulfilled ，p的状态才会变成fulfilled</p>
+<ul>
+<li>此时p1、p2、p3的返回值组成一个数组，传递给p的回调函数。</li>
+</ul>
+</li>
+<li><p>只要p1、p2、p3之中有一个被rejected，p的状态就变成rejected</p>
+<ul>
+<li>此时第一个被reject的实例的返回值，会传递给p的回调函数。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Promise-race"><a href="#Promise-race" class="headerlink" title="Promise.race()"></a>Promise.race()</h3><p>Promise.race方法同样是将多个Promise实例，包装成一个新的Promise实例。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> p = <span class="built_in">Promise</span>.race([p1,p2,p3]);</div></pre></td></tr></table></figure>
+<p>上面代码中，只要p1、p2、p3之中有一个实例率先改变状态，p的状态就跟着改变。<br>那个率先改变的Promise实例的返回值，就传递给p的回调函数。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Node-js/" rel="tag">#Node.js</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/08/Node模块系统/" rel="next" title="Node模块系统">
+                <i class="fa fa-chevron-left"></i> Node模块系统
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/2.jpg"
+               alt="CaoYanqi" />
+          <p class="site-author-name" itemprop="name">CaoYanqi</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Node-js-学习笔记03"><span class="nav-number">1.</span> <span class="nav-text">Node.js 学习笔记03</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件操作"><span class="nav-number">1.1.</span> <span class="nav-text">文件操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#同步调用和异步调用"><span class="nav-number">1.1.1.</span> <span class="nav-text">同步调用和异步调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-支持的编码类型"><span class="nav-number">1.1.2.</span> <span class="nav-text">Node 支持的编码类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件操作常用API"><span class="nav-number">1.1.3.</span> <span class="nav-text">文件操作常用API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目录操作常用API"><span class="nav-number">1.1.4.</span> <span class="nav-text">目录操作常用API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#监视"><span class="nav-number">1.1.5.</span> <span class="nav-text">监视</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件流"><span class="nav-number">1.1.6.</span> <span class="nav-text">文件流</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Promise"><span class="nav-number">1.2.</span> <span class="nav-text">Promise</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Promise-对象"><span class="nav-number">1.2.1.</span> <span class="nav-text">Promise 对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本使用"><span class="nav-number">1.2.2.</span> <span class="nav-text">基本使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Promise-all"><span class="nav-number">1.2.3.</span> <span class="nav-text">Promise.all()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Promise-race"><span class="nav-number">1.2.4.</span> <span class="nav-text">Promise.race()</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CaoYanqi</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
